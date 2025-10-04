@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇵🇭 Philippine E-Commerce Learning Platform - Vino Arsan</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+        }
+        
+        #root {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Icon components (simplified versions)
+        const BookOpen = () => <span style={{fontSize: '1.5em'}}>📚</span>;
+        const CheckCircle = () => <span style={{fontSize: '1.5em', color: '#10b981'}}>✅</span>;
+        const Circle = () => <span style={{fontSize: '1.5em', color: '#d1d5db'}}>⭕</span>;
+        const ChevronDown = () => <span>▼</span>;
+        const ChevronUp = () => <span>▲</span>;
+        const ExternalLink = () => <span style={{fontSize: '0.8em'}}>🔗</span>;
+        const Code = () => <span>💻</span>;
+        const Rocket = () => <span>🚀</span>;
+        const Lock = () => <span>🔒</span>;
+        const Globe = () => <span>🌐</span>;
+        const ShoppingCart = () => <span>🛒</span>;
+        const User = () => <span>👤</span>;
+        const Layers = () => <span>📊</span>;
+        const AlertTriangle = () => <span style={{color: '#f59e0b'}}>⚠️</span>;
+        const MapPin = () => <span>📍</span>;
+
+        function WebDevLearningPlatformPH() {
+            const [expandedModule, setExpandedModule] = useState(null);
+            const [completedLessons, setCompletedLessons] = useState(new Set());
+            const [activeTab, setActiveTab] = useState('overview');
+
+            const learningPath = [
+                {
+                    id: 'foundations',
+                    title: 'Understanding E-commerce Architecture',
+                    icon: '📊',
+                    duration: '2-3 hours',
+                    description: 'Learn how modern e-commerce sites work and the different integration approaches',
+                    lessons: [
+                        {
+                            id: 'foundations-1',
+                            title: 'Static vs Dynamic Websites',
+                            summary: 'Understanding the difference between static sites (like your current Vino Arsan HTML) and dynamic e-commerce platforms.',
+                            phContext: '🇵🇭 For Philippine wine sales, you need FDA compliance, GCash integration, and mobile-first design.'
+                        },
+                        {
+                            id: 'foundations-2',
+                            title: 'How Shopify Works (Philippine Edition)',
+                            summary: 'Learn Shopify basics and why Shopify Payments is NOT available in Philippines - you must use PayMongo, Xendit, or Dragonpay.',
+                            phContext: '🇵🇭 CRITICAL: Sign up for PayMongo account first - approval takes 3-5 days!'
+                        }
+                    ]
+                },
+                {
+                    id: 'ph-legal',
+                    title: '🇵🇭 Philippine Legal Compliance',
+                    icon: '⚖️',
+                    duration: '4-6 hours',
+                    description: 'CRITICAL: Legal requirements for selling alcohol online in the Philippines',
+                    isPHSpecific: true,
+                    lessons: [
+                        {
+                            id: 'ph-legal-1',
+                            title: '⚠️ Alcohol Sales Regulations (MUST READ)',
+                            summary: 'Online alcohol sales in PH are in a LEGAL GRAY AREA. FDA Circular No. 2019-006 requires age verification, proper labeling, and "Drink Responsibly" messaging.',
+                            phContext: '🚨 DO NOT LAUNCH without: (1) Consulting lawyer (₱10K-20K), (2) Contacting FDA Philippines, (3) Getting FDA License to Operate'
+                        },
+                        {
+                            id: 'ph-legal-2',
+                            title: 'Business Registration Requirements',
+                            summary: 'DTI registration, Mayor\'s permit, BIR registration, and FDA License to Operate (₱8,000-15,000, valid 2 years).',
+                            phContext: '🇵🇭 FDA license is NON-NEGOTIABLE. Each imported wine must also be FDA-registered (₱3K-5K per product).'
+                        },
+                        {
+                            id: 'ph-legal-3',
+                            title: 'Enhanced Age Verification System',
+                            summary: 'Your current popup is NOT legally sufficient. Need 4 layers: (1) Website entry, (2) Account registration, (3) Checkout, (4) Delivery ID check.',
+                            phContext: '🇵🇭 Driver must check valid government ID at delivery. Cannot hand over to minors. Keep verification records for 2 years.'
+                        }
+                    ]
+                },
+                {
+                    id: 'shopify',
+                    title: 'Shopify Integration',
+                    icon: '🛒',
+                    duration: '4-6 hours',
+                    description: 'Learn to integrate Shopify with your custom design (PH payment processors)',
+                    lessons: [
+                        {
+                            id: 'shopify-1',
+                            title: 'Setting Up Shopify Store (Philippine Edition)',
+                            summary: 'Create Shopify Partner account, development store, add products, configure for PHP currency, Asia/Manila timezone.',
+                            phContext: '🇵🇭 Settings: Currency=PHP, Unit=Metric, Enable PayMongo app, Set up COD with age verification instructions'
+                        },
+                        {
+                            id: 'shopify-2',
+                            title: 'Buy Button Integration (Easiest)',
+                            summary: 'Fastest way to add e-commerce: Generate Buy Buttons in Shopify, embed in your HTML. Customer stays on your site, checkout in modal.',
+                            phContext: '🇵🇭 Customize: moneyFormat=₱{{amount}}, Cart text="Subtotal (VAT Inclusive)", Add age verification notice above buttons'
+                        },
+                        {
+                            id: 'shopify-3',
+                            title: 'Storefront API Integration (Advanced)',
+                            summary: 'Full control via GraphQL API. Fetch products, build custom cart. More complex but more customizable.',
+                            phContext: '🇵🇭 Recommended: Start with Buy Button for Vino Arsan. Move to API only if you need complete checkout customization.'
+                        }
+                    ]
+                },
+                {
+                    id: 'ph-logistics',
+                    title: '🚚 Philippine Logistics & Delivery',
+                    icon: '📦',
+                    duration: '2-3 hours',
+                    description: 'Setting up wine delivery in the Philippines',
+                    isPHSpecific: true,
+                    lessons: [
+                        {
+                            id: 'ph-logistics-1',
+                            title: 'Choosing Delivery Partners',
+                            summary: 'Metro Manila: Lalamove, Grab Express (₱150-350, same-day). Nationwide: J&T, LBC, Ninja Van (₱70-350, 3-7 days).',
+                            phContext: '⚠️ CRITICAL: Call couriers FIRST to confirm they deliver alcohol. Some refuse. Get written confirmation.'
+                        },
+                        {
+                            id: 'ph-logistics-2',
+                            title: 'Packaging & Handling',
+                            summary: 'Bubble wrap (2-3 layers), sturdy boxes, packing material, "FRAGILE" labels, "FOR 18+ ONLY" stickers. Consider heat in PH (35°C+).',
+                            phContext: '🇵🇭 Cost per bottle: ₱30-60 basic, ₱80-120 insulated. Hot weather requires express delivery or ice packs.'
+                        },
+                        {
+                            id: 'ph-logistics-3',
+                            title: 'Driver Training & Age Verification',
+                            summary: 'Create driver instruction sheet, train on ID verification, acceptable IDs (Driver\'s License, National ID, Passport, etc.).',
+                            phContext: '🇵🇭 Driver must record ID type and last 4 digits. If recipient under 18 or no valid ID: DO NOT DELIVER. Return package.'
+                        }
+                    ]
+                },
+                {
+                    id: 'auth',
+                    title: 'User Authentication & Accounts',
+                    icon: '👤',
+                    duration: '3-5 hours',
+                    description: 'Implement secure login and user account systems',
+                    lessons: [
+                        {
+                            id: 'auth-1',
+                            title: 'Authentication Basics',
+                            summary: 'Shopify handles customer accounts automatically. Includes password reset, email verification, secure by default.',
+                            phContext: '🇵🇭 Data Privacy Act (RA 10173): Must have Privacy Policy, get consent, allow data access/deletion requests.'
+                        },
+                        {
+                            id: 'auth-2',
+                            title: 'Implementing Login UI',
+                            summary: 'Link to Shopify login pages or create custom modal. Collect birthdate at registration for age verification.',
+                            phContext: '🇵🇭 Enhanced registration: Require phone (09XX XXX XXXX), birthdate (auto-reject if <18), Terms acceptance.'
+                        }
+                    ]
+                },
+                {
+                    id: 'domain',
+                    title: 'Domain & SSL Setup',
+                    icon: '🌐',
+                    duration: '2-3 hours',
+                    description: 'Launch your site with a custom domain and secure HTTPS',
+                    lessons: [
+                        {
+                            id: 'domain-1',
+                            title: 'Choosing & Buying a Domain',
+                            summary: '.COM vs .PH domains. Recommended: Buy both, redirect .com to .ph for local trust and SEO.',
+                            phContext: '🇵🇭 .PH domains: ₱1,000-2,000/year via domains.ph or dot.ph. Requires DTI certificate. Shows you\'re local business.'
+                        },
+                        {
+                            id: 'domain-2',
+                            title: 'Connecting Domain to Shopify',
+                            summary: 'Add A record (@ → 23.227.38.65) and CNAME (www → shops.myshopify.com). DNS propagation takes 24-48 hours.',
+                            phContext: '🇵🇭 Test from Globe, Smart, PLDT networks. Use Cloudflare for faster speeds in Philippines and free CDN.'
+                        },
+                        {
+                            id: 'domain-3',
+                            title: 'SSL Certificates & HTTPS',
+                            summary: 'Shopify provides FREE SSL automatically. Activates 0-24 hours after DNS connects. Required for PayMongo.',
+                            phContext: '🇵🇭 Test on actual Philippine mobile networks. PayMongo requires valid SSL before merchant approval. Test at ssllabs.com.'
+                        }
+                    ]
+                },
+                {
+                    id: 'portfolio',
+                    title: 'Adding to Your Portfolio',
+                    icon: '🚀',
+                    duration: '2-3 hours',
+                    description: 'Showcase your Vino Arsan project professionally',
+                    lessons: [
+                        {
+                            id: 'portfolio-1',
+                            title: 'Portfolio Structure & Presentation',
+                            summary: 'Hero image, project overview, problem statement, solution, design process, technical challenges, Philippine adaptations, results.',
+                            phContext: '🇵🇭 Emphasize: FDA compliance, PayMongo integration, GCash support, mobile-first (90% traffic), local courier setup.'
+                        },
+                        {
+                            id: 'portfolio-2',
+                            title: 'Creating Visual Assets',
+                            summary: 'Use Mockuuups Studio for device mockups, take screenshots, create design system card, show before/after.',
+                            phContext: '🇵🇭 Show: GCash payment flow, age verification gate, ₱ peso pricing, Philippine UI elements. Create video walkthrough.'
+                        },
+                        {
+                            id: 'portfolio-3',
+                            title: 'Portfolio Platform & Presentation',
+                            summary: 'Options: Custom site (Vercel/Netlify), Behance, GitHub, LinkedIn. Feature Vino Arsan prominently.',
+                            phContext: '🇵🇭 Post on: Kalibrr, JobStreet, DevCon PH. Join: Developers Connect PH, Web Developers Philippines (Facebook).'
+                        }
+                    ]
+                },
+                {
+                    id: 'deployment',
+                    title: 'Going Live: Deployment',
+                    icon: '🔒',
+                    duration: '3-4 hours',
+                    description: 'Launch your site to the world safely and successfully',
+                    lessons: [
+                        {
+                            id: 'deployment-1',
+                            title: 'Pre-Launch Checklist (Philippine Edition)',
+                            summary: '50+ items to check: content, technical, legal, payment, delivery, mobile optimization. Print and check off each.',
+                            phContext: '🇵🇭 DO NOT LAUNCH IF: FDA not approved, PayMongo pending, SSL inactive, age verification broken, no courier confirmed.'
+                        },
+                        {
+                            id: 'deployment-2',
+                            title: 'Launch Day Steps',
+                            summary: 'Remove password protection, switch to production, verify domain/SSL. Soft launch to 5-10 friends first, monitor 48 hours.',
+                            phContext: '🇵🇭 Launch Tuesday or Wednesday (not Friday!). Post at 9-11 AM. Target: 3-5 orders Day 1. Facebook will be 50-70% of traffic.'
+                        },
+                        {
+                            id: 'deployment-3',
+                            title: 'Post-Launch Optimization',
+                            summary: 'Week 1: Monitor & fix. Week 2-4: Analyze traffic, optimize. Track: device breakdown, payment preferences, cart abandonment.',
+                            phContext: '🇵🇭 Expect: 85-95% mobile, GCash 40-60%, Metro Manila 60-80%. Optimize GCash flow, add FAQ, local SEO (Google My Business).'
+                        }
+                    ]
+                }
+            ];
+
+            const toggleModule = (moduleId) => {
+                setExpandedModule(expandedModule === moduleId ? null : moduleId);
+            };
+
+            const toggleLesson = (lessonId) => {
+                const newCompleted = new Set(completedLessons);
+                if (newCompleted.has(lessonId)) {
+                    newCompleted.delete(lessonId);
+                } else {
+                    newCompleted.add(lessonId);
+                }
+                setCompletedLessons(newCompleted);
+            };
+
+            const calculateProgress = () => {
+                const totalLessons = learningPath.reduce((acc, module) => acc + module.lessons.length, 0);
+                return Math.round((completedLessons.size / totalLessons) * 100);
+            };
+
+            const Overview = () => (
+                <div style={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
+                    <div style={{background: 'linear-gradient(to right, #9333ea, #3b82f6)', color: 'white', padding: '2rem', borderRadius: '0.5rem'}}>
+                        <h2 style={{fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem'}}>🇵🇭 Your Philippine E-Commerce Learning Path</h2>
+                        <p style={{fontSize: '1.125rem', marginBottom: '1rem'}}>
+                            Master everything you need to transform your Vino Arsan site from a beautiful design into a fully functional e-commerce store that complies with Philippine regulations.
+                        </p>
+                        <div style={{background: 'rgba(255,255,255,0.2)', padding: '1rem', borderRadius: '0.5rem'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem'}}>
+                                <span style={{fontWeight: '600'}}>Overall Progress</span>
+                                <span style={{fontWeight: 'bold'}}>{calculateProgress()}%</span>
+                            </div>
+                            <div style={{width: '100%', background: 'rgba(255,255,255,0.3)', borderRadius: '9999px', height: '0.75rem'}}>
+                                <div style={{background: 'white', height: '0.75rem', borderRadius: '9999px', transition: 'width 0.3s', width: `${calculateProgress()}%`}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style={{background: '#fef3c7', borderLeft: '4px solid #f59e0b', padding: '1.5rem', borderRadius: '0 0.5rem 0.5rem 0'}}>
+                        <h3 style={{fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '0.5rem'}}>
+                            <span>💡</span> Philippine-Focused Learning Approach
+                        </h3>
+                        <ul style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#374151', listStyle: 'none'}}>
+                            <li>✅ <strong>Local Market Context:</strong> Every lesson includes Philippine-specific guidance</li>
+                            <li>✅ <strong>Practical First:</strong> Real solutions for PayMongo, GCash, FDA compliance</li>
+                            <li>✅ <strong>Legal Compliance:</strong> Navigate PH alcohol regulations safely</li>
+                            <li>✅ <strong>Mobile-First:</strong> Optimized for 90% mobile traffic in Philippines</li>
+                        </ul>
+                    </div>
+
+                    <div style={{background: '#fee2e2', borderLeft: '4px solid #dc2626', padding: '1.5rem', borderRadius: '0 0.5rem 0.5rem 0'}}>
+                        <h3 style={{fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+                            <span>⚠️</span> CRITICAL: Legal Requirements
+                        </h3>
+                        <ul style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#374151', listStyle: 'none'}}>
+                            <li>⚠️ <strong>FDA License Required:</strong> Cannot legally sell alcohol without it</li>
+                            <li>⚠️ <strong>Age Verification Mandatory:</strong> Multi-layer system needed</li>
+                            <li>⚠️ <strong>Gray Legal Area:</strong> Consult lawyer before launching (₱10K-20K)</li>
+                            <li>⚠️ <strong>Payment Restrictions:</strong> Shopify Payments NOT available in PH</li>
+                            <li>⚠️ <strong>Timeline:</strong> Add 2-4 weeks for FDA approval process</li>
+                        </ul>
+                    </div>
+
+                    <div style={{background: 'white', padding: '1.5rem', borderRadius: '0.5rem', border: '2px solid #e5e7eb'}}>
+                        <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '1rem'}}>🇵🇭 Learning Modules</h3>
+                        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem'}}>
+                            {learningPath.map(module => (
+                                <div key={module.id} style={{
+                                    display: 'flex', 
+                                    alignItems: 'flex-start', 
+                                    gap: '0.75rem',
+                                    padding: module.isPHSpecific ? '0.75rem' : '0',
+                                    background: module.isPHSpecific ? '#fef3c7' : 'transparent',
+                                    borderRadius: '0.5rem',
+                                    border: module.isPHSpecific ? '2px solid #fcd34d' : 'none'
+                                }}>
+                                    <div style={{fontSize: '1.5rem', marginTop: '0.25rem'}}>{module.icon}</div>
+                                    <div>
+                                        <h4 style={{fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap'}}>
+                                            {module.title}
+                                            {module.isPHSpecific && <span style={{fontSize: '0.75rem', background: '#d97706', color: 'white', padding: '0.125rem 0.5rem', borderRadius: '0.25rem'}}>PH Specific</span>}
+                                        </h4>
+                                        <p style={{fontSize: '0.875rem', color: '#4b5563', marginTop: '0.25rem'}}>{module.description}</p>
+                                        <p style={{fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem'}}>⏱️ {module.duration}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div style={{background: '#dbeafe', borderLeft: '4px solid #3b82f6', padding: '1.5rem', borderRadius: '0 0.5rem 0.5rem 0'}}>
+                        <h3 style={{fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '0.5rem'}}>
+                            <span>📍</span> Philippine Market Reality
+                        </h3>
+                        <ul style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#374151', listStyle: 'none'}}>
+                            <li>📱 90% of Filipino internet users browse on mobile - mobile-first design is ESSENTIAL</li>
+                            <li>💳 Shopify Payments NOT available - must use PayMongo, Xendit, or Dragonpay</li>
+                            <li>💰 GCash dominates (20M+ users) - must support for conversions</li>
+                            <li>🚚 COD still 40% of market - include despite added complexity</li>
+                            <li>🏛️ Alcohol sales in gray area - legal compliance critical</li>
+                            <li>⚖️ FDA license mandatory - budget 2-4 weeks for approval</li>
+                        </ul>
+                    </div>
+                </div>
+            );
+
+            const Lessons = () => (
+                <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+                    {learningPath.map((module) => {
+                        const isExpanded = expandedModule === module.id;
+                        const completedInModule = module.lessons.filter(l => completedLessons.has(l.id)).length;
+                        const progressPercent = (completedInModule / module.lessons.length) * 100;
+
+                        return (
+                            <div key={module.id} style={{
+                                border: module.isPHSpecific ? '2px solid #fbbf24' : '2px solid #e5e7eb',
+                                borderRadius: '0.5rem',
+                                overflow: 'hidden'
+                            }}>
+                                <div 
+                                    onClick={() => toggleModule(module.id)}
+                                    style={{
+                                        background: module.isPHSpecific ? '#fef3c7' : '#f9fafb',
+                                        padding: '1rem',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = '#f3f4f6'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = module.isPHSpecific ? '#fef3c7' : '#f9fafb'}
+                                >
+                                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem'}}>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1'}}>
+                                            <div style={{fontSize: '1.5rem'}}>{module.icon}</div>
+                                            <div>
+                                                <h3 style={{fontWeight: 'bold', fontSize: '1.125rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap'}}>
+                                                    {module.title}
+                                                    {module.isPHSpecific && <span style={{fontSize: '0.75rem', background: '#d97706', color: 'white', padding: '0.125rem 0.5rem', borderRadius: '0.25rem'}}>🇵🇭 PH Specific</span>}
+                                                </h3>
+                                                <p style={{fontSize: '0.875rem', color: '#4b5563'}}>{module.description}</p>
+                                            </div>
+                                        </div>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                            <div style={{textAlign: 'right'}}>
+                                                <div style={{fontSize: '0.875rem', fontWeight: '600', color: '#374151'}}>
+                                                    {completedInModule}/{module.lessons.length} completed
+                                                </div>
+                                                <div style={{fontSize: '0.75rem', color: '#6b7280'}}>⏱️ {module.duration}</div>
+                                            </div>
+                                            <span>{isExpanded ? '▲' : '▼'}</span>
+                                        </div>
+                                    </div>
+                                    <div style={{marginTop: '0.75rem'}}>
+                                        <div style={{width: '100%', background: '#e5e7eb', borderRadius: '9999px', height: '0.5rem'}}>
+                                            <div style={{
+                                                background: module.isPHSpecific ? '#d97706' : '#3b82f6',
+                                                height: '0.5rem',
+                                                borderRadius: '9999px',
+                                                transition: 'width 0.3s',
+                                                width: `${progressPercent}%`
+                                            }} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {isExpanded && (
+                                    <div style={{padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem', background: 'white'}}>
+                                        {module.lessons.map((lesson) => {
+                                            const isCompleted = completedLessons.has(lesson.id);
+                                            
+                                            return (
+                                                <div key={lesson.id} style={{border: '2px solid #f3f4f6', borderRadius: '0.5rem', padding: '1rem'}}>
+                                                    <div style={{display: 'flex', alignItems: 'flex-start', gap: '0.75rem'}}>
+                                                        <button
+                                                            onClick={() => toggleLesson(lesson.id)}
+                                                            style={{
+                                                                marginTop: '0.25rem',
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                cursor: 'pointer',
+                                                                fontSize: '1.5rem'
+                                                            }}
+                                                        >
+                                                            {isCompleted ? '✅' : '⭕'}
+                                                        </button>
+                                                        <div style={{flex: '1'}}>
+                                                            <h4 style={{fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '0.75rem'}}>{lesson.title}</h4>
+                                                            
+                                                            <div style={{background: '#f9fafb', padding: '1rem', borderRadius: '0.5rem', marginBottom: '1rem'}}>
+                                                                <p style={{color: '#374151'}}>{lesson.summary}</p>
+                                                            </div>
+
+                                                            {lesson.phContext && (
+                                                                <div style={{background: '#fef3c7', borderLeft: '4px solid #f59e0b', padding: '1rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '1rem'}}>
+                                                                    <h5 style={{fontWeight: 'bold', color: '#92400e', marginBottom: '0.5rem'}}>
+                                                                        🇵🇭 Philippine Context
+                                                                    </h5>
+                                                                    <p style={{color: '#374151'}}>{lesson.phContext}</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+
+            const Resources = () => (
+                <div style={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
+                    <div style={{background: '#dbeafe', padding: '1.5rem', borderRadius: '0.5rem', border: '2px solid #93c5fd'}}>
+                        <h2 style={{fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1e40af'}}>🇵🇭 Philippine E-Commerce Resources</h2>
+                        <p style={{color: '#374151'}}>
+                            Curated list of the best resources for launching e-commerce in the Philippines.
+                        </p>
+                    </div>
+
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem'}}>
+                        <div style={{background: '#fef3c7', padding: '1.5rem', borderRadius: '0.5rem', border: '2px solid #fcd34d'}}>
+                            <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '1rem'}}>
+                                ⚖️ Philippine Government & Legal
+                            </h3>
+                            <ul style={{display: 'flex', flexDirection: 'column', gap: '0.75rem', listStyle: 'none'}}>
+                                <li><a href="https://www.fda.gov.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 FDA Philippines</a></li>
+                                <li><a href="https://www.dti.gov.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 DTI (Business Registration)</a></li>
+                                <li><a href="https://www.bir.gov.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 BIR (Tax Registration)</a></li>
+                                <li><a href="https://www.privacy.gov.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Privacy Commission</a></li>
+                            </ul>
+                        </div>
+
+                        <div style={{background: 'white', padding: '1.5rem', borderRadius: '0.5rem', border: '2px solid #e5e7eb'}}>
+                            <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '1rem'}}>
+                                💳 Payment Processors
+                            </h3>
+                            <ul style={{display: 'flex', flexDirection: 'column', gap: '0.75rem', listStyle: 'none'}}>
+                                <li><a href="https://www.paymongo.com" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 PayMongo (GCash, Cards)</a></li>
+                                <li><a href="https://www.xendit.co/en-ph/" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Xendit</a></li>
+                                <li><a href="https://www.dragonpay.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Dragonpay (OTC)</a></li>
+                                <li><a href="https://www.gcash.com" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 GCash</a></li>
+                            </ul>
+                        </div>
+
+                        <div style={{background: 'white', padding: '1.5rem', borderRadius: '0.5rem', border: '2px solid #e5e7eb'}}>
+                            <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '1rem'}}>
+                                🚚 Logistics Partners
+                            </h3>
+                            <ul style={{display: 'flex', flexDirection: 'column', gap: '0.75rem', listStyle: 'none'}}>
+                                <li><a href="https://www.lalamove.com/philippines" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Lalamove (Same-day)</a></li>
+                                <li><a href="https://www.jtexpress.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 J&T Express (COD)</a></li>
+                                <li><a href="https://www.lbcexpress.com" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 LBC (Trusted)</a></li>
+                                <li><a href="https://www.ninjavan.co/ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Ninja Van</a></li>
+                            </ul>
+                        </div>
+
+                        <div style={{background: 'white', padding: '1.5rem', borderRadius: '0.5rem', border: '2px solid #e5e7eb'}}>
+                            <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '1rem'}}>
+                                🌐 Domains & Hosting
+                            </h3>
+                            <ul style={{display: 'flex', flexDirection: 'column', gap: '0.75rem', listStyle: 'none'}}>
+                                <li><a href="https://www.domains.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Domains.ph (.PH domains)</a></li>
+                                <li><a href="https://www.dot.ph" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Dot.ph</a></li>
+                                <li><a href="https://www.cloudflare.com" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Cloudflare</a></li>
+                                <li><a href="https://www.shopify.com/partners" target="_blank" style={{color: '#2563eb', textDecoration: 'none'}}>🔗 Shopify Partners</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style={{background: '#fef3c7', padding: '1.5rem', borderRadius: '0.5rem', border: '2px solid #fcd34d'}}>
+                        <h3 style={{fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '1rem'}}>📞 Important Philippine Contacts</h3>
+                        <div style={{display: 'flex', flexDirection: 'column', gap: '0.75rem'}}>
+                            <div>
+                                <strong>🏛️ FDA Philippines:</strong> (02) 8857-1900 | centro@fda.gov.ph
+                            </div>
+                            <div>
+                                <strong>💼 DTI Contact Center:</strong> (02) 751-5100
+                            </div>
+                            <div>
+                                <strong>💰 BIR Contact:</strong> (02) 8538-3200
+                            </div>
+                            <div>
+                                <strong>💳 PayMongo:</strong> hello@paymongo.com
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div style={{minHeight: '100vh', background: 'linear-gradient(to bottom right, #dbeafe, #f3e8ff, #fce7f3)', padding: '1rem'}}>
+                    <div style={{maxWidth: '1280px', margin: '0 auto'}}>
+                        {/* Header */}
+                        <div style={{background: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '1.5rem', marginBottom: '1.5rem'}}>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap'}}>
+                                <div style={{background: 'linear-gradient(to right, #9333ea, #3b82f6)', color: 'white', padding: '0.75rem', borderRadius: '0.5rem'}}>
+                                    <span style={{fontSize: '2rem'}}>📚</span>
+                                </div>
+                                <div style={{flex: '1', minWidth: '200px'}}>
+                                    <h1 style={{fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 'bold', color: '#111827'}}>
+                                        🇵🇭 Philippine E-Commerce Learning Platform
+                                    </h1>
+                                    <p style={{color: '#6b7280', fontSize: 'clamp(0.875rem, 2vw, 1rem)'}}>Complete guide to launching Vino Arsan in the Philippine market</p>
+                                </div>
+                            </div>
+                            
+                            <div style={{background: '#f3f4f6', padding: '1rem', borderRadius: '0.5rem'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem'}}>
+                                    <span style={{fontSize: '0.875rem', fontWeight: '600', color: '#374151'}}>Your Progress</span>
+                                    <span style={{fontSize: '0.875rem', fontWeight: 'bold', color: '#9333ea'}}>{calculateProgress()}% Complete</span>
+                                </div>
+                                <div style={{width: '100%', background: '#e5e7eb', borderRadius: '9999px', height: '0.75rem'}}>
+                                    <div style={{
+                                        background: 'linear-gradient(to right, #9333ea, #3b82f6)',
+                                        height: '0.75rem',
+                                        borderRadius: '9999px',
+                                        transition: 'width 0.3s',
+                                        width: `${calculateProgress()}%`
+                                    }} />
+                                </div>
+                                <div style={{marginTop: '0.5rem', fontSize: '0.75rem', color: '#6b7280'}}>
+                                    {completedLessons.size} of {learningPath.reduce((acc, m) => acc + m.lessons.length, 0)} lessons completed
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Tabs */}
+                        <div style={{background: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', marginBottom: '1.5rem'}}>
+                            <div style={{display: 'flex', borderBottom: '1px solid #e5e7eb'}}>
+                                {['overview', 'lessons', 'resources'].map(tab => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab)}
+                                        style={{
+                                            flex: '1',
+                                            padding: '1rem 1.5rem',
+                                            fontWeight: '600',
+                                            transition: 'colors 0.2s',
+                                            border: 'none',
+                                            background: 'none',
+                                            cursor: 'pointer',
+                                            borderBottom: activeTab === tab ? '2px solid #9333ea' : 'none',
+                                            color: activeTab === tab ? '#9333ea' : '#6b7280'
+                                        }}
+                                    >
+                                        {tab === 'overview' && '📋 Overview'}
+                                        {tab === 'lessons' && '📚 Lessons'}
+                                        {tab === 'resources' && '🔗 Resources'}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div style={{background: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '1.5rem'}}>
+                            {activeTab === 'overview' && <Overview />}
+                            {activeTab === 'lessons' && <Lessons />}
+                            {activeTab === 'resources' && <Resources />}
+                        </div>
+
+                        {/* Footer */}
+                        <div style={{marginTop: '1.5rem', textAlign: 'center', color: '#6b7280', fontSize: '0.875rem'}}>
+                            <p>💪 Kaya mo 'yan! Every expert was once a beginner.</p>
+                            <p style={{marginTop: '0.5rem'}}>🇵🇭 Built specifically for the Philippine e-commerce market</p>
+                            <p style={{marginTop: '0.5rem'}}>🚀 Take it one lesson at a time!</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<WebDevLearningPlatformPH />);
+    </script>
+</body>
+</html>
