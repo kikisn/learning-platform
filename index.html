@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Dev Learning Platform - Vino Arsan 🇵🇭</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script>
+        const { useState, createElement: h } = React;
+        const { createRoot } = ReactDOM;
+
+        function WebDevLearningPlatform() {
+          const [expandedModule, setExpandedModule] = useState('foundations');
+          const [expandedLesson, setExpandedLesson] = useState(null);
+          const [completedLessons, setCompletedLessons] = useState(new Set());
+          const [activeTab, setActiveTab] = useState('lessons');
+
+          const learningPath = [
+            {
+              id: 'foundations',
+              title: 'Understanding E-commerce Architecture',
+              icon: '📊',
+              duration: '2-3 hours',
+              description: 'Learn how modern e-commerce sites work and the different integration approaches',
+              lessons: [
+                {
+                  id: 'foundations-1',
+                  title: 'Static vs Dynamic Websites',
+                  content: `Your Vino Arsan site is currently "static" - HTML, CSS, and JavaScript files. To add shopping capabilities, you need to understand the difference:
+
+**Static Sites (What you have now):**
+- Just files served directly to users
+- No database, no user accounts, no real-time updates
+- Fast, simple, but limited functionality
+
+**Dynamic Sites (What you need):**
+- Server-side code that generates pages on-demand
+- Database to store products, orders, customers
+- User authentication and personalization
+
+**The Good News:** You don't have to rebuild everything! You have options:
+
+1. **Headless Commerce** - Keep your beautiful frontend, connect to Shopify's backend via API
+2. **Platform Integration** - Convert to Shopify theme, use their infrastructure
+3. **Hybrid Approach** - Static marketing pages, link to hosted store`,
+                  philippineContext: 'For Philippine wine sales, you need FDA compliance, GCash integration, and mobile-first design.',
+                  resources: [
+                    { title: 'Jamstack Architecture Explained', url: 'https://jamstack.org/what-is-jamstack/' },
+                    { title: 'Headless Commerce 101', url: 'https://www.shopify.com/enterprise/headless-commerce' }
+                  ],
+                  practical: 'Decision Point: Which approach fits your skills and client needs?'
+                },
+                {
+                  id: 'foundations-2',
+                  title: 'How Shopify Works (Philippine Edition)',
+                  content: `Shopify is a complete e-commerce platform. Think of it as "WordPress for online stores" but more powerful.
+
+**What Shopify Handles:**
+- Product catalog & inventory
+- Shopping cart functionality
+- Checkout & payment processing (via PayMongo in Philippines!)
+- Order management
+- Customer accounts
+- Analytics & reporting
+- Hosting & security
+
+**Your Integration Options:**
+
+**Option 1: Shopify Buy Button**
+- Easiest! Add a script tag to your HTML
+- Keep your entire design
+- Products open in overlay/modal
+- 5-minute setup
+
+**Option 2: Storefront API (Headless)**
+- You build the frontend (like you did)
+- Fetch products via JavaScript
+- More control, more complexity`,
+                  philippineContext: 'Remember: Shopify Payments NOT available in PH. You MUST use PayMongo or Xendit for payments. Also need FDA license for alcohol!',
+                  resources: [
+                    { title: 'Shopify Buy Button SDK', url: 'https://shopify.dev/docs/api/custom-storefronts/buy-button-js' },
+                    { title: 'PayMongo Integration', url: 'https://developers.paymongo.com/docs' }
+                  ],
+                  practical: 'Action: Set up a free Shopify Partner account'
+                }
+              ]
+            },
+            {
+              id: 'shopify',
+              title: 'Shopify Integration (PH Edition)',
+              icon: '🛒',
+              duration: '4-6 hours',
+              description: 'Learn to integrate Shopify with PayMongo for Philippine e-commerce',
+              lessons: [
+                {
+                  id: 'shopify-1',
+                  title: 'Setting Up Your Shopify Store',
+                  content: `Let's get your Shopify environment ready:
+
+**Step 1: Create Shopify Partner Account**
+- Go to shopify.com/partners
+- Sign up (free)
+- You get unlimited development stores
+
+**Step 2: Create a Development Store**
+- From Partners dashboard → Stores → Add Store
+- Choose "Development store"
+- Enable "Storefront API" in Settings
+
+**Step 3: Add Your Products**
+- Products → Add product
+- For Vino Arsan, add each wine
+- Include: title, description, price in PESOS (₱), images
+- Create collections (Red Wines, White Wines, etc.)`,
+                  philippineContext: 'FDA compliance NON-NEGOTIABLE. Budget ₱8,000-15,000 for FDA LTO. Also need DTI registration.',
+                  resources: [
+                    { title: 'Shopify Partners', url: 'https://www.shopify.com/partners' },
+                    { title: 'FDA Philippines', url: 'https://www.fda.gov.ph/' }
+                  ],
+                  practical: 'Create partner account now (10 minutes)'
+                },
+                {
+                  id: 'shopify-2',
+                  title: 'PayMongo Integration',
+                  content: `PayMongo is the best payment option for Philippines:
+
+**Why PayMongo:**
+- Official Shopify partner
+- Supports GCash (20+ million users!)
+- Credit/debit cards
+- GrabPay, Maya/PayMaya
+
+**Fees:**
+- Cards: 3.5% + ₱15 per transaction
+- E-wallets: 2.5% + ₱15`,
+                  philippineContext: 'GCash is ESSENTIAL - 40%+ prefer it. Don\'t launch without GCash!',
+                  resources: [
+                    { title: 'PayMongo', url: 'https://www.paymongo.com/shopify' }
+                  ],
+                  practical: 'Sign up for PayMongo - takes 3-5 days verification'
+                }
+              ]
+            },
+            {
+              id: 'ph-legal',
+              title: 'Philippine Legal Compliance',
+              icon: '🔒',
+              duration: '3-4 hours',
+              description: 'CRITICAL: Legal requirements for selling wine online',
+              lessons: [
+                {
+                  id: 'ph-legal-1',
+                  title: 'FDA License & Regulations',
+                  content: `⚠️ MOST IMPORTANT LESSON!
+
+**FDA REQUIREMENTS:**
+1. **FDA License to Operate (LTO)**
+   - Required to legally sell alcohol
+   - Cost: ₱8,000-15,000
+   - Valid for 2 years
+   - Processing: 2-4 weeks
+
+2. **Age Verification**
+   - Cannot sell to under 18
+   - Must verify ID at checkout AND delivery
+
+**Legal Status:**
+- No explicit ban on online alcohol sales
+- But no clear regulations either
+- Enforcement focuses on preventing sales to minors`,
+                  philippineContext: 'Budget ₱10,000-20,000 for legal consultation + FDA. NOT optional!',
+                  resources: [
+                    { title: 'FDA Philippines', url: 'https://www.fda.gov.ph/' }
+                  ],
+                  practical: 'Contact FDA and lawyer BEFORE building more'
+                }
+              ]
+            }
+          ];
+
+          const toggleModule = (moduleId) => {
+            setExpandedModule(expandedModule === moduleId ? null : moduleId);
+          };
+
+          const toggleLesson = (lessonId) => {
+            setExpandedLesson(expandedLesson === lessonId ? null : lessonId);
+          };
+
+          const markComplete = (lessonId) => {
+            const newCompleted = new Set(completedLessons);
+            if (newCompleted.has(lessonId)) {
+              newCompleted.delete(lessonId);
+            } else {
+              newCompleted.add(lessonId);
+            }
+            setCompletedLessons(newCompleted);
+          };
+
+          const calculateProgress = () => {
+            const totalLessons = learningPath.reduce((acc, module) => acc + module.lessons.length, 0);
+            return Math.round((completedLessons.size / totalLessons) * 100);
+          };
+
+          // Overview component
+          const Overview = () => {
+            return h('div', { className: 'space-y-6' },
+              h('div', { className: 'bg-gradient-to-r from-purple-600 to-blue-600 text-white p-8 rounded-lg' },
+                h('h2', { className: 'text-3xl font-bold mb-4' }, '🚀 Your Web Development Learning Path'),
+                h('p', { className: 'text-lg mb-4' }, 
+                  'Master everything you need to transform Vino Arsan into a fully functional e-commerce store - with Philippine-specific guidance!'),
+                h('div', { className: 'bg-white/20 p-4 rounded-lg' },
+                  h('div', { className: 'flex justify-between mb-2' },
+                    h('span', { className: 'font-semibold' }, 'Overall Progress'),
+                    h('span', { className: 'font-bold' }, `${calculateProgress()}%`)
+                  ),
+                  h('div', { className: 'w-full bg-white/30 rounded-full h-3' },
+                    h('div', { 
+                      className: 'bg-white h-3 rounded-full transition-all duration-300',
+                      style: { width: `${calculateProgress()}%` }
+                    })
+                  )
+                )
+              ),
+              h('div', { className: 'bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg' },
+                h('h3', { className: 'font-bold text-lg mb-2' }, '🇵🇭 PHILIPPINE CONTEXT ADDED!'),
+                h('ul', { className: 'space-y-1 text-gray-700' },
+                  h('li', null, '✅ FDA compliance and alcohol regulations'),
+                  h('li', null, '✅ PayMongo integration'),
+                  h('li', null, '✅ GCash and local payment methods'),
+                  h('li', null, '✅ DTI, BIR, business registration'),
+                  h('li', null, '✅ Philippine shipping and logistics')
+                )
+              )
+            );
+          };
+
+          // Lessons component
+          const Lessons = () => {
+            return h('div', { className: 'space-y-4' },
+              learningPath.map((module) => {
+                const isExpanded = expandedModule === module.id;
+                const completedInModule = module.lessons.filter(l => completedLessons.has(l.id)).length;
+                const progressPercent = (completedInModule / module.lessons.length) * 100;
+
+                return h('div', { 
+                  key: module.id, 
+                  className: 'border-2 border-gray-200 rounded-lg overflow-hidden bg-white' 
+                },
+                  h('div', {
+                    className: 'bg-gray-50 p-4 cursor-pointer hover:bg-gray-100 transition-colors',
+                    onClick: () => toggleModule(module.id)
+                  },
+                    h('div', { className: 'flex items-center justify-between' },
+                      h('div', { className: 'flex items-center gap-3' },
+                        h('div', { className: 'text-blue-600 text-2xl' }, module.icon),
+                        h('div', null,
+                          h('h3', { className: 'font-bold text-lg' }, module.title),
+                          h('p', { className: 'text-sm text-gray-600' }, module.description)
+                        )
+                      ),
+                      h('div', { className: 'flex items-center gap-4' },
+                        h('div', { className: 'text-right' },
+                          h('div', { className: 'text-sm font-semibold text-gray-700' },
+                            `${completedInModule}/${module.lessons.length} completed`
+                          ),
+                          h('div', { className: 'text-xs text-gray-500' }, `⏱️ ${module.duration}`)
+                        ),
+                        h('div', null, isExpanded ? '▲' : '▼')
+                      )
+                    ),
+                    h('div', { className: 'mt-3' },
+                      h('div', { className: 'w-full bg-gray-200 rounded-full h-2' },
+                        h('div', {
+                          className: 'bg-blue-600 h-2 rounded-full transition-all duration-300',
+                          style: { width: `${progressPercent}%` }
+                        })
+                      )
+                    )
+                  ),
+                  isExpanded && h('div', { className: 'p-4 space-y-3 bg-white' },
+                    module.lessons.map((lesson) => {
+                      const isCompleted = completedLessons.has(lesson.id);
+                      const isLessonExpanded = expandedLesson === lesson.id;
+
+                      return h('div', { 
+                        key: lesson.id,
+                        className: 'border-2 border-gray-100 rounded-lg overflow-hidden'
+                      },
+                        h('div', {
+                          className: 'flex items-start gap-3 p-4 cursor-pointer hover:bg-gray-50',
+                          onClick: () => toggleLesson(lesson.id)
+                        },
+                          h('button', {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              markComplete(lesson.id);
+                            },
+                            className: 'mt-1 flex-shrink-0 text-2xl'
+                          }, isCompleted ? '✅' : '⭕'),
+                          h('div', { className: 'flex-grow' },
+                            h('h4', { className: 'font-bold text-lg' }, lesson.title),
+                            h('p', { className: 'text-sm text-gray-500' }, 
+                              `Click to ${isLessonExpanded ? 'collapse' : 'expand'}`)
+                          ),
+                          h('div', null, isLessonExpanded ? '▲' : '▼')
+                        ),
+                        isLessonExpanded && h('div', { className: 'px-4 pb-4 space-y-4' },
+                          h('div', { className: 'whitespace-pre-line text-gray-700 bg-gray-50 p-4 rounded-lg text-sm' },
+                            lesson.content
+                          ),
+                          lesson.philippineContext && h('div', { 
+                            className: 'bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg' 
+                          },
+                            h('h5', { className: 'font-bold text-yellow-900 mb-2' }, '🇵🇭 Philippine Context'),
+                            h('p', { className: 'text-gray-700 text-sm' }, lesson.philippineContext)
+                          ),
+                          lesson.practical && h('div', { 
+                            className: 'bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg' 
+                          },
+                            h('h5', { className: 'font-bold text-green-900 mb-2' }, '🛠️ Practical Exercise'),
+                            h('p', { className: 'text-gray-700 text-sm' }, lesson.practical)
+                          ),
+                          lesson.resources && lesson.resources.length > 0 && h('div', { 
+                            className: 'bg-blue-50 p-4 rounded-lg' 
+                          },
+                            h('h5', { className: 'font-bold text-blue-900 mb-2' }, '📚 Resources'),
+                            h('ul', { className: 'space-y-2' },
+                              lesson.resources.map((resource, idx) =>
+                                h('li', { key: idx },
+                                  h('a', {
+                                    href: resource.url,
+                                    target: '_blank',
+                                    rel: 'noopener noreferrer',
+                                    className: 'text-blue-600 hover:text-blue-800 text-sm'
+                                  }, `🔗 ${resource.title}`)
+                                )
+                              )
+                            )
+                          )
+                        )
+                      );
+                    })
+                  )
+                );
+              })
+            );
+          };
+
+          // Main render
+          return h('div', { className: 'min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4' },
+            h('div', { className: 'max-w-6xl mx-auto' },
+              // Header
+              h('div', { className: 'bg-white rounded-lg shadow-lg p-6 mb-6' },
+                h('div', { className: 'flex items-center gap-4 mb-4' },
+                  h('div', { className: 'bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-lg text-3xl' }, '📚'),
+                  h('div', null,
+                    h('h1', { className: 'text-3xl font-bold text-gray-900' }, 'Web Dev Learning Platform 🇵🇭'),
+                    h('p', { className: 'text-gray-600' }, 'Complete guide to launching Vino Arsan in Philippines')
+                  )
+                ),
+                h('div', { className: 'bg-gray-100 p-4 rounded-lg' },
+                  h('div', { className: 'flex justify-between mb-2' },
+                    h('span', { className: 'text-sm font-semibold text-gray-700' }, 'Your Progress'),
+                    h('span', { className: 'text-sm font-bold text-purple-600' }, `${calculateProgress()}% Complete`)
+                  ),
+                  h('div', { className: 'w-full bg-gray-200 rounded-full h-3' },
+                    h('div', {
+                      className: 'bg-gradient-to-r from-purple-600 to-blue-600 h-3 rounded-full transition-all',
+                      style: { width: `${calculateProgress()}%` }
+                    })
+                  ),
+                  h('div', { className: 'mt-2 text-xs text-gray-600' },
+                    `${completedLessons.size} of ${learningPath.reduce((acc, m) => acc + m.lessons.length, 0)} lessons completed`
+                  )
+                )
+              ),
+              
+              // Tabs
+              h('div', { className: 'bg-white rounded-lg shadow-lg mb-6' },
+                h('div', { className: 'flex border-b' },
+                  h('button', {
+                    onClick: () => setActiveTab('overview'),
+                    className: `flex-1 px-6 py-4 font-semibold transition-colors ${
+                      activeTab === 'overview' 
+                        ? 'border-b-2 border-purple-600 text-purple-600' 
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`
+                  }, '📋 Overview'),
+                  h('button', {
+                    onClick: () => setActiveTab('lessons'),
+                    className: `flex-1 px-6 py-4 font-semibold transition-colors ${
+                      activeTab === 'lessons' 
+                        ? 'border-b-2 border-purple-600 text-purple-600' 
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`
+                  }, '📚 Lessons')
+                )
+              ),
+              
+              // Content
+              h('div', { className: 'bg-white rounded-lg shadow-lg p-6' },
+                activeTab === 'overview' ? h(Overview) : h(Lessons)
+              ),
+              
+              // Help text
+              h('div', { className: 'mt-6 bg-blue-50 border-2 border-blue-200 rounded-lg p-4' },
+                h('p', { className: 'text-blue-900 font-semibold mb-2 text-center' }, '💡 How to Use:'),
+                h('ol', { className: 'text-sm text-blue-800 space-y-1 max-w-2xl mx-auto' },
+                  h('li', null, '1️⃣ Click module headers to expand/collapse'),
+                  h('li', null, '2️⃣ Click lesson titles to see full content'),
+                  h('li', null, '3️⃣ Click circles to mark complete'),
+                  h('li', null, '4️⃣ Watch for 🇵🇭 Philippine Context boxes!')
+                )
+              ),
+              
+              // Footer
+              h('div', { className: 'mt-6 text-center text-gray-600 text-sm' },
+                h('p', null, '💪 You\'ve got this! Every expert was once a beginner.')
+              )
+            )
+          );
+        }
+
+        // Render
+        const root = createRoot(document.getElementById('root'));
+        root.render(h(WebDevLearningPlatform));
+    </script>
+</body>
+</html>
