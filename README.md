@@ -4,7 +4,7 @@ A comprehensive, interactive learning platform for building and launching the Vi
 
 ## 🚀 Live Demo
 
-Visit: `https://[your-username].github.io/vino-arsan-learning-platform`
+Visit: `https://kikisn.github.io/vino-arsan-learning-platform`
 
 ## 📚 What You'll Learn
 
