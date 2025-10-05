@@ -1,8 +1,13 @@
-
-   import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { BookOpen, CheckCircle, Circle, ChevronDown, ChevronUp, ExternalLink, Code, Rocket, Lock, Globe, ShoppingCart, User, Layers } from 'lucide-react';
 
-export default function WebDevLearningPlatform() {
+// Lucide React icons loaded via CDN
+const { 
+  BookOpen, CheckCircle, Circle, ChevronDown, ChevronUp, 
+  ExternalLink, Code, Rocket, Lock, Globe, ShoppingCart, User, Layers 
+} = lucideReact;
+
+function WebDevLearningPlatform() {
   const [expandedModule, setExpandedModule] = useState('foundations'); // Start with first module open
   const [expandedLesson, setExpandedLesson] = useState(null);
   const [completedLessons, setCompletedLessons] = useState(new Set());
@@ -699,3 +704,8 @@ Choose courier that supports:
     </div>
   );
 }
+
+
+// Render the app
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<WebDevLearningPlatform />);
